@@ -1,0 +1,90 @@
+import sys
+import picture as p
+from picture import Picture
+import stddraw
+
+#Defining the life cycle of a fly
+cycle_fly =  [1, 1, 'FLY']#Re-considering setting the first 2 to zero so that the maintenance function can do all that work
+cycle_bee = [1, 1, 'BEE']#Re-onsidering setting the first 2 to zero so that the maintenance function can do all that work
+cycle_shooter=[1, 1, 'SHOOTER']#Re-considering setting the first 2 to zero so that the maintenance function can do all that work
+
+cycle_dict = {
+            'FLY': cycle_fly,
+            'BEE': cycle_bee,
+            'SHOOTER': cycle_shooter
+        }
+
+class object:
+    def __init__(_object, x_location:int, y_location:int, image_filename,x_size:float,y_size:float, x_velocity:float,y_velocity:float,object_id: str,  life: int):
+        #Position
+        _object.x_location = x_location
+        _object.y_location = y_location
+            
+        #image
+        _object.image_filename = image_filename
+        _object.x_size = x_size
+        _object.y_size = y_size
+
+        #motion
+        _object.x_velocity = x_velocity
+        _object.y_velocity = y_velocity
+
+        #information for the maintainer
+        _object.object_id = object_id
+    
+        #information for the maintainer
+        _object.life = life 
+
+    def _getdimensions(_object):
+        pic  = Picture(_object.image_filename)
+        the_x_width = pic.width()
+        the_y_height = pic.height()
+        thelist = [the_x_width, the_y_height]
+        return thelist
+    
+
+    def drawobject(_object):
+        pic = Picture(_object.image_filename)
+        stddraw.picture(pic, _object.x_location, _object.y_location, _object.x_size, _object.y_size)
+
+    def cycle(_object):
+        #The lifecycle of the object based on its objectype
+        change = cycle_dict[_object.object_id]
+        _object.x_velocity = x_velocity+change[0]
+        _object.y_velocity = y_velocity+change[1]
+
+        _object.x_location = x_location+x_velocity#Reconsider puting the location setting before the velocity change
+        _object.y_location = y_location+y_velocity
+        #_object.image_filename = image_filename#uncertain what to do with this
+
+        _object.object_id = change[2]
+        #_object.state_alive = state_alive#Not known until decided by the report system
+        report_self(_object, objecter_check)#THis will auto delete a object if you manage to get it on time
+        if (_object.life>0):
+            _object.drawobject()
+            
+        
+
+    def get_magnitude_velocity(_object):
+        return (x_velocity**2+y_velocity**2)**0.5
+
+    def report_self(_object, objecter_check):
+        #ttempted_state = object.test_newstate()
+        #Takes the state the objects wants to be in and returns the state the object will end up in.
+        rightstate = objecter.corrected(_object)
+        return rightstate
+
+
+
+def main():
+    pic = p.Picture('C:\\Users\\T\\Downloads\\Fly.png')
+    #picture(pic, .5, .85)
+    #show(0.0)
+    stddraw.setCanvasSize(500,500)#Create a function for getting how big the use wants the screen to be
+    stddraw.setXscale(0,10)
+    stddraw.setYscale(0,10)
+    stddraw.picture(pic,7, 7, 2, 2)#Create a function for controlling this
+    stddraw.show(1000)
+
+if __name__=='__main__':main()
+
